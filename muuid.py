@@ -27,7 +27,7 @@ def create_uuid():
 
 
 
-def set_object_uuid(mobject, update=False):
+def set_object_uuid(mobject, update=False, newID=None):
     '''
     Set a node's uuid attibute...
     '''
@@ -58,7 +58,7 @@ def set_object_uuid(mobject, update=False):
         uuid_plug = MFn_node.findPlug(NODE_UUID_ATTR_NAME)
 
     #- set uuid attribute value...
-    uuid_plug.setString(create_uuid())
+    uuid_plug.setString(newID or create_uuid())
     uuid_plug.setLocked(True)
 
     MFn_node.setLocked(node_lock_status)
