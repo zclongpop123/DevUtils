@@ -444,13 +444,26 @@ def node_add_message_callback(*args):
 
 
 
+def file_read_message_callback(*args):
+    '''
+    add uuid to node when file imported...
+    '''
+    set_scene_uuid_data()
+
+
+
+
+
 def add_scene_message_callback():
     '''
     Create a message track to call message callback...
     '''
     if MESSAGE_CALLBACK_ARRAY.length() > 0:
         return
+    #-
     MESSAGE_CALLBACK_ARRAY.append(OpenMaya.MDGMessage.addNodeAddedCallback(node_add_message_callback))
+    #-
+    MESSAGE_CALLBACK_ARRAY.append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kAfterFileRead, file_read_message_callback))
 
 
 
