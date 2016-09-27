@@ -17,6 +17,22 @@ FIRST_VERSION_FILE    = 'Name_v{0}.{1}'.format(string.zfill(1, VERSION_PRECISION
 
 
 
+def get_file_version(filePath):
+    '''
+    Get file's version...
+    Exp:
+        D:/test/name_v001.ma - 001
+        D:/test/name_v002.ma - 002
+        ...
+    '''
+    version = re.search(VERSION_MATCH_PATTERN, os.path.basename(filePath))
+    if version:
+        return version.group()
+
+
+
+
+
 def get_file_list(path, kWords=None, ext=None):
     '''
     Get versions and files in input path...
@@ -30,17 +46,17 @@ def get_file_list(path, kWords=None, ext=None):
 
     files = os.listdir(path)
     for f in files:
-        version = re.search(VERSION_MATCH_PATTERN, f)
-        if not version:
-            continue
-
         if kWords and not re.search(kWords, f):
             continue
 
         if ext and not re.search('{0}$'.format(ext), f):
             continue
 
-        yield version.group(), os.path.normpath(os.path.join(path, f))
+        version = get_file_version(f)
+        if not version:
+            continue
+
+        yield version, os.path.normpath(os.path.join(path, f))
 
 
 

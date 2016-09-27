@@ -13,6 +13,22 @@ FIRST_VERSION_FOLDER  = 'v{0}'.format(string.zfill(1, VERSION_PRECISION))
 
 
 
+def get_folder_version(folder):
+    '''
+    Get folder's version...
+    Exp:
+        D:/test/name_v001.ma - 001
+        D:/test/name_v002.ma - 002
+        ...
+    '''
+    version = re.search(VERSION_MATCH_PATTERN, os.path.basename(folder))
+    if version:
+        return version.group()
+
+
+
+
+
 def get_folder_list(path, kWords=None):
     '''
     Get versions and folders in input path...
@@ -25,14 +41,14 @@ def get_folder_list(path, kWords=None):
         return
 
     for folder in os.listdir(path):
-        version = re.search(VERSION_MATCH_PATTERN, folder)
-        if not version:
-            continue
-
         if kWords and not re.search(kWords, folder):
             continue
 
-        yield version.group(), os.path.normpath(os.path.join(path, folder))
+        version = get_folder_version(folder)
+        if not version:
+            continue
+
+        yield version, os.path.normpath(os.path.join(path, folder))
 
 
 
